@@ -13,13 +13,12 @@ import jakarta.persistence.Transient;
 @Entity
 @Table(name = "signup")
 public class EbillDto {
-
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	private Integer id;
 	private Long customerId;
 	private Long consumerId;
-	private String billNumber;
+	private String billNumber;	
 	private String title;
 	private String customerName;
 	private String email;
