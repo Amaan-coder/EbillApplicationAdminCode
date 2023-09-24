@@ -11,7 +11,7 @@ import jakarta.persistence.Table;
 import jakarta.persistence.Transient;
 
 @Entity
-@Table(name = "ebillapp")
+@Table(name = "signup")
 public class EbillDto {
 
 	@Id
