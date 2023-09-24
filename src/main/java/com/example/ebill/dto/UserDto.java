@@ -19,7 +19,7 @@ public class UserDto {
 	private Long customerId;
 	private Long consumerId;
 	private String billNumber;	
-	private String title;
+	
 	private String customerName;
 	private String email;
 	private String countryCode;	
@@ -47,13 +47,6 @@ public class UserDto {
 		this.billNumber = lastFiveDigits;
 	}
 
-	public String getTitle() {
-		return title;
-	}
-
-	public void setTitle(String title) {
-		this.title = title;
-	}
 
 	public String getCustomerName() {
 		return customerName;

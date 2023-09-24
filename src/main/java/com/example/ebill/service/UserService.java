@@ -11,6 +11,8 @@ import com.example.ebill.dto.ResponseDto;
 import com.example.ebill.exception.ValidationFailedException;
 import com.example.ebill.repository.UserRepo;
 
+import jakarta.persistence.EntityNotFoundException;
+
 @Service
 public class UserService {
 
@@ -51,7 +53,7 @@ public class UserService {
 		Long customerId = (long) rand.nextInt(100000000);
 
 		ebillDto.setCustomerId(customerId);
-		System.out.println("CustomerId----->" + customerId);
+		
 
 		dao.save(ebillDto);
 		outMessage = "Customer Added Sucessfully";
@@ -99,6 +101,42 @@ public class UserService {
 		return new ResponseDto(ebill);
 	}
 
-	
+	public ResponseDto getUserProfile(String userId) {
+		UserDto user = dao.findByUserId(userId);
+		return new ResponseDto(user);
+	}
+
+
+	public ResponseDto updateUserByCustomerId(Long customerId, UserDto userDto) {
+	    // Find the user by customerId
+	    UserDto existingUser = dao.findByCustomerId(customerId);
+
+	    if (existingUser == null) {
+	        throw new EntityNotFoundException("User not found");
+	    }
+
+	    // Update the user's properties based on the provided data
+	    if (userDto.getCustomerName() != null) {
+	        existingUser.setCustomerName(userDto.getCustomerName());
+	    }
+	    if (userDto.getEmail() != null) {
+	        existingUser.setEmail(userDto.getEmail());
+	    }
+	    if (userDto.getCountryCode() != null) {
+	        existingUser.setCountryCode(userDto.getCountryCode());
+	    }
+	    if (userDto.getMobileNumber() != null) {
+	        existingUser.setMobileNumber(userDto.getMobileNumber());
+	    }
+	    if (userDto.getUserId() != null) {
+	        existingUser.setUserId(userDto.getUserId());
+	    }
+
+	    dao.save(existingUser);
+	    String outMessage = "User profile updated";
+
+	    return new ResponseDto(outMessage);
+	}
+
 
 }

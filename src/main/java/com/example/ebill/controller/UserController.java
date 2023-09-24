@@ -36,6 +36,18 @@ public class UserController {
 		return userService.login(userDto);
 	}
 	
+	
+	@GetMapping("/userprofile/{userId}")
+	public ResponseDto getUserProfile(@PathVariable String userId) {
+		return userService.getUserProfile(userId);
+	}
+	
+	@PostMapping("/updateuser/{customerId}")
+	public ResponseDto updateUserByCustomerId(@PathVariable Long customerId, @RequestBody UserDto userDto) {
+	    return userService.updateUserByCustomerId(customerId, userDto);
+	}
+
+	
 	@GetMapping("/userlist")
 	public ResponseDto userList(){
 		return userService.fetchUserList();
