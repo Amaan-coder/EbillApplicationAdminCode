@@ -19,7 +19,7 @@ public class UserDto {
 	private Long customerId;
 	private Long consumerId;
 	private String billNumber;	
-	
+	private String title;
 	private String customerName;
 	private String email;
 	private String countryCode;	
@@ -110,6 +110,14 @@ public class UserDto {
 
 	public void setCustomerId(Long customerId) {
 		this.customerId = customerId;
+	}
+
+	public String getTitle() {
+		return title;
+	}
+
+	public void setTitle(String title) {
+		this.title = title;
 	}
 
 

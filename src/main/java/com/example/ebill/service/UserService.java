@@ -1,5 +1,6 @@
 package com.example.ebill.service;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
@@ -18,7 +19,27 @@ public class UserService {
 
 	@Autowired
 	private UserRepo dao;
+	
+	public void postLogin() {
 
+		UserDto users = new UserDto();
+		Random rand = new Random();
+		Long customerId = (long) rand.nextInt(100000000);
+		users.setCustomerId(customerId);
+		users.setConsumerId((long) 1234567891);
+		users.setCustomerName("Mohd Amaan");
+		users.setEmail("mohd.amaan45@gmail.com");
+		users.setCountryCode("+91");
+		users.setMobileNumber("7905378465");
+		users.setUserId("amaan1324");
+		users.setPassword("admin");
+		users.setConfirmPassword("admin");
+		dao.save(users);
+
+	}
+
+	
+	
 	public ResponseDto signup(UserDto ebillDto) {
 
 		Long consumerId;
@@ -43,17 +64,16 @@ public class UserService {
 			}
 		}
 		consumerIdLenght = String.valueOf(ebillDto.getConsumerId());
-		if (consumerIdLenght.length() < 13) {
-			throw new ValidationFailedException("ConsumerId could not be less than 13");
+		if (consumerIdLenght.length() < 10) {
+			throw new ValidationFailedException("ConsumerId could not be less than 10");
 		}
 		String lastFiveDigits = getLastFiveDigits(ebillDto.getConsumerId());
 		ebillDto.setBillNumber(lastFiveDigits);
-		Random rand = new Random();
 
+		Random rand = new Random();
 		Long customerId = (long) rand.nextInt(100000000);
 
 		ebillDto.setCustomerId(customerId);
-		
 
 		dao.save(ebillDto);
 		outMessage = "Customer Added Sucessfully";
@@ -69,7 +89,7 @@ public class UserService {
 			int startIndex = length - 5;
 			return consumerIdStr.substring(startIndex);
 		} else {
-			throw new ValidationFailedException("Consumer Id not less than 13");
+			throw new ValidationFailedException("Consumer Id not less than 10");
 		}
 	}
 
@@ -82,7 +102,7 @@ public class UserService {
 
 			if (retrievedUser.getPassword().equals(userDto.getPassword())
 					&& retrievedUser.getUserId().equals(userDto.getUserId())) {
-				outMessage = "User Login Successful";
+				outMessage = "User Login Successfully " + retrievedUser.getCustomerName();
 			} else {
 				throw new ValidationFailedException("Incorrect username or password");
 			}
@@ -93,9 +113,8 @@ public class UserService {
 		return new ResponseDto(outMessage);
 	}
 
-	//Login end here
-	
-	
+	// Login end here
+
 	public ResponseDto fetchUserList() {
 		List<UserDto> ebill = dao.findAll();
 		return new ResponseDto(ebill);
@@ -106,36 +125,35 @@ public class UserService {
 		return new ResponseDto(user);
 	}
 
-
 	public ResponseDto updateUserByCustomerId(Long customerId, UserDto userDto) {
-	    // Find the user by customerId
-	    UserDto existingUser = dao.findByCustomerId(customerId);
+		// Find the user by customerId
+		UserDto existingUser = dao.findByCustomerId(customerId);
 
-	    if (existingUser == null) {
-	        throw new EntityNotFoundException("User not found");
-	    }
+		if (existingUser == null) {
+			throw new EntityNotFoundException("User not found");
+		}
 
-	    // Update the user's properties based on the provided data
-	    if (userDto.getCustomerName() != null) {
-	        existingUser.setCustomerName(userDto.getCustomerName());
-	    }
-	    if (userDto.getEmail() != null) {
-	        existingUser.setEmail(userDto.getEmail());
-	    }
-	    if (userDto.getCountryCode() != null) {
-	        existingUser.setCountryCode(userDto.getCountryCode());
-	    }
-	    if (userDto.getMobileNumber() != null) {
-	        existingUser.setMobileNumber(userDto.getMobileNumber());
-	    }
-	    if (userDto.getUserId() != null) {
-	        existingUser.setUserId(userDto.getUserId());
-	    }
+		// Update the user's properties based on the provided data
+		if (userDto.getCustomerName() != null) {
+			existingUser.setCustomerName(userDto.getCustomerName());
+		}
+		if (userDto.getEmail() != null) {
+			existingUser.setEmail(userDto.getEmail());
+		}
+		if (userDto.getCountryCode() != null) {
+			existingUser.setCountryCode(userDto.getCountryCode());
+		}
+		if (userDto.getMobileNumber() != null) {
+			existingUser.setMobileNumber(userDto.getMobileNumber());
+		}
+		if (userDto.getUserId() != null) {
+			existingUser.setUserId(userDto.getUserId());
+		}
 
-	    dao.save(existingUser);
-	    String outMessage = "User profile updated";
+		dao.save(existingUser);
+		String outMessage = "User profile updated";
 
-	    return new ResponseDto(outMessage);
+		return new ResponseDto(outMessage);
 	}
 
 
